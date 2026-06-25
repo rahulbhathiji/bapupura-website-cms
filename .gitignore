@@ -1,0 +1,15 @@
+# Node.js dependencies
+node_modules/
+# Environment variables
+.env
+# Backend data storage
+backend/data/
+backend/uploads/
+# Logs and temporary files
+*.log
+# OS files
+.DS_Store
+Thumbs.db
+# Vite/React build output
+admin/dist/
+admin/build/

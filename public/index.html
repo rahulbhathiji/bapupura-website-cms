@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="gu" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="site-meta-title">Shri Raghuveer Chaudhary Sanskar Bhavan Bapupura</title>
+    
+    <!-- SEO meta tags dynamically managed -->
+    <meta name="description" id="site-meta-desc" content="Bapupura Community Development Hub">
+    <meta name="keywords" id="site-meta-keywords" content="Bapupura, Sanskar Bhavan, Gandhinagar">
+    <meta property="og:title" id="og-title" content="Shri Raghuveer Chaudhary Sanskar Bhavan Bapupura">
+    <meta property="og:description" id="og-desc" content="Bapupura Community Development Hub">
+    <meta property="og:image" id="og-image" content="">
+    <meta name="twitter:card" id="twitter-card" content="summary_large_image">
+    
+    <link rel="shortcut icon" id="site-favicon" href="/favicon.ico">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhai+2:wght@400;600;800&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', 'Baloo Bhai 2', sans-serif; }
+        .lang-gu .en-text { display: none !important; }
+        .lang-en .gu-text { display: none !important; }
+        .modal-active { overflow: hidden; }
+    </style>
+</head>
+<body class="bg-sky-50 text-slate-800 lang-gu transition-colors duration-300">
+
+    <!-- Announcement Marquee Bar -->
+    <div id="banner-wrapper" class="bg-sky-700 text-white py-2 overflow-hidden text-sm font-medium border-b border-sky-600">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="w-full whitespace-nowrap overflow-hidden relative">
+                <span id="banner-text-gu" class="inline-block animate-marquee gu-text">નવી સૂચના: આગામી ડિજિટલ સાક્ષરતા અને કૃષિ સેમિનાર આવતા રવિવારે યોજાશે. રજીસ્ટ્રેશન ખુલ્લું છે!</span>
+                <span id="banner-text-en" class="inline-block animate-marquee en-text">Notice: Upcoming Digital Literacy and Agriculture Seminar next Sunday. Registration is open!</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sticky Main Header -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur shadow-md border-b border-sky-100">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#home" class="flex items-center gap-3">
+                <div id="brand-logo" class="bg-sky-600 text-white p-2.5 rounded-xl shadow-inner font-bold text-xl">SR</div>
+                <div>
+                    <h1 id="site-name-gu" class="text-sky-900 font-bold text-base md:text-xl leading-tight font-sans tracking-wide gu-text">શ્રી રઘુવીર ચૌધરી સંસ્કાર ભવન</h1>
+                    <h1 id="site-name-en" class="text-sky-900 font-bold text-base md:text-xl leading-tight font-sans tracking-wide en-text">Shri Raghuveer Chaudhary Sanskar Bhavan</h1>
+                    <p id="site-sub-gu" class="text-xs text-sky-600 font-semibold uppercase tracking-wider gu-text">બાપુપુરા સમુદાય વિકાસ કેન્દ્ર</p>
+                    <p id="site-sub-en" class="text-xs text-sky-600 font-semibold uppercase tracking-wider en-text">Bapupura Community Development Hub</p>
+                </div>
+            </a>
+
+            <nav class="hidden xl:flex items-center gap-6 text-sm font-semibold text-slate-600">
+                <a href="#home" class="hover:text-sky-600 transition-colors gu-text">હોમ</a>
+                <a href="#home" class="hover:text-sky-600 transition-colors en-text">Home</a>
+                <a href="#about" class="hover:text-sky-600 transition-colors gu-text">વિશે</a>
+                <a href="#about" class="hover:text-sky-600 transition-colors en-text">About</a>
+                <a href="#facilities" class="hover:text-sky-600 transition-colors gu-text">સુવિધાઓ</a>
+                <a href="#facilities" class="hover:text-sky-600 transition-colors en-text">Facilities</a>
+                <a href="#library" class="modal-link hover:text-sky-600 transition-colors gu-text">પુસ્તકાલય</a>
+                <a href="#library" class="modal-link hover:text-sky-600 transition-colors en-text">Library</a>
+                <a href="#events" class="modal-link hover:text-sky-600 transition-colors gu-text">કાર્યક્રમો</a>
+                <a href="#events" class="modal-link hover:text-sky-600 transition-colors en-text">Events</a>
+                <a href="#women" class="modal-link hover:text-sky-600 transition-colors gu-text">મહિલા સશક્તિકરણ</a>
+                <a href="#women" class="modal-link hover:text-sky-600 transition-colors en-text">Women Empowerment</a>
+                <a href="#news" class="hover:text-sky-600 transition-colors gu-text">સૂચનાઓ</a>
+                <a href="#news" class="hover:text-sky-600 transition-colors en-text">Notices</a>
+                <a href="#contact" class="hover:text-sky-600 transition-colors gu-text">સંપર્ક</a>
+                <a href="#contact" class="hover:text-sky-600 transition-colors en-text">Contact</a>
+            </nav>
+
+            <div class="flex items-center gap-3">
+                <button id="language-toggle-btn" class="bg-sky-100 hover:bg-sky-200 text-sky-800 font-bold px-3 py-1.5 rounded-lg text-xs md:text-sm transition-all border border-sky-200 cursor-pointer flex items-center gap-1 shadow-sm">
+                    🌐 <span id="langBtnText">English</span>
+                </button>
+                <a href="#donation" class="bg-amber-500 hover:bg-amber-600 text-white font-bold px-4 py-1.5 rounded-lg text-xs md:text-sm shadow-md transition-all gu-text">દાન કરો</a>
+                <a href="#donation" class="bg-amber-500 hover:bg-amber-600 text-white font-bold px-4 py-1.5 rounded-lg text-xs md:text-sm shadow-md transition-all en-text">Donate</a>
+                
+                <button id="mobile-menu-toggle-btn" class="xl:hidden text-slate-700 focus:outline-none cursor-pointer p-1">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer Menu Navigation -->
+    <div id="mobileDrawer" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs hidden transition-opacity">
+        <div class="fixed top-0 right-0 w-72 bg-white h-full shadow-2xl p-6 flex flex-col gap-5">
+            <div class="flex justify-between items-center border-b pb-3">
+                <span class="font-bold text-sky-900 gu-text">મેનુ નેવિગેશન</span>
+                <span class="font-bold text-sky-900 en-text">Navigation</span>
+                <button id="mobile-menu-close-btn" class="text-slate-500 text-xl font-bold cursor-pointer">&times;</button>
+            </div>
+            <nav id="mobile-menu-links" class="flex flex-col gap-4 text-base font-semibold text-slate-700">
+                <a href="#home" class="hover:text-sky-600 gu-text">હોમ</a><a href="#home" class="hover:text-sky-600 en-text">Home</a>
+                <a href="#about" class="hover:text-sky-600 gu-text">અમારા વિશે</a><a href="#about" class="hover:text-sky-600 en-text">About Trust</a>
+                <a href="#facilities" class="hover:text-sky-600 gu-text">સુવિધાઓ</a><a href="#facilities" class="hover:text-sky-600 en-text">Facilities</a>
+                <a href="#library" class="modal-link hover:text-sky-600 gu-text">પુસ્તકાલય અને રીડિંગ રૂમ</a><a href="#library" class="modal-link hover:text-sky-600 en-text">Library</a>
+                <a href="#events" class="modal-link hover:text-sky-600 gu-text">સેમિનાર અને કાર્યક્રમો</a><a href="#events" class="modal-link hover:text-sky-600 en-text">Seminars</a>
+                <a href="#women" class="modal-link hover:text-sky-600 gu-text">મહિલા સશક્તિકરણ</a><a href="#women" class="modal-link hover:text-sky-600 en-text">Women Empowerment</a>
+                <a href="#news" class="hover:text-sky-600 gu-text">સમાચાર અને સૂચનાઓ</a><a href="#news" class="hover:text-sky-600 en-text">News</a>
+                <a href="#contact" class="hover:text-sky-600 gu-text">સંપર્ક કરો</a><a href="#contact" class="hover:text-sky-600 en-text">Contact Us</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- HERO SECTION -->
+    <section id="home" class="relative bg-gradient-to-b from-sky-200 via-sky-100 to-sky-50 py-16 md:py-28 px-4 border-b border-sky-100">
+        <div class="container mx-auto max-w-5xl text-center">
+            <span id="hero-tag-gu" class="bg-sky-600 text-white text-xs md:text-sm font-bold uppercase tracking-widest px-4 py-1.5 rounded-full shadow-xs gu-text">શિક્ષણ • સંસ્કૃતિ • પ્રગતિ</span>
+            <span id="hero-tag-en" class="bg-sky-600 text-white text-xs md:text-sm font-bold uppercase tracking-widest px-4 py-1.5 rounded-full shadow-xs en-text">Education • Culture • Growth</span>
+            
+            <h2 id="hero-heading-gu" class="text-3xl md:text-6xl font-extrabold text-slate-900 mt-6 tracking-tight leading-tight gu-text">બાપુપુરા ગામ અને આસપાસના વિસ્તારના સર્વાંગી વિકાસનું કેન્દ્ર</h2>
+            <h2 id="hero-heading-en" class="text-3xl md:text-5xl font-extrabold text-slate-900 mt-6 tracking-tight leading-tight en-text">Empowering Bapupura Village Through Knowledge & Character</h2>
+            
+            <p id="hero-desc-gu" class="text-slate-600 text-base md:text-xl mt-4 max-w-3xl mx-auto leading-relaxed gu-text">સામાજિક, શૈક્ષણિક, સાંસ્કૃતિક અને આર્થિક ઉત્થાન માટે સમર્પિત ડિજિટલ સુવિધાઓથી સજ્જ આધુનિક સંસ્કાર ભવન.</p>
+            <p id="hero-desc-en" class="text-slate-600 text-base md:text-lg mt-4 max-w-3xl mx-auto leading-relaxed en-text">A modern institutional hub equipped with state-of-the-art facilities dedicated to social, educational, and economic empowerment.</p>
+            
+            <div class="mt-8 flex flex-wrap justify-center gap-4">
+                <a href="#facilities" id="hero-btn1-gu" class="bg-sky-600 hover:bg-sky-700 text-white font-bold px-6 py-3 rounded-xl shadow-lg transition-all gu-text">સુવિધાઓ જુઓ &rarr;</a>
+                <a href="#facilities" id="hero-btn1-en" class="bg-sky-600 hover:bg-sky-700 text-white font-bold px-6 py-3 rounded-xl shadow-lg transition-all en-text">Explore Facilities &rarr;</a>
+                <a href="#events" id="hero-btn2-gu" class="modal-link bg-white hover:bg-slate-50 text-slate-800 font-bold px-6 py-3 rounded-xl shadow-md border border-slate-200 transition-all gu-text">આગામી સેમિનારો</a>
+                <a href="#events" id="hero-btn2-en" class="modal-link bg-white hover:bg-slate-50 text-slate-800 font-bold px-6 py-3 rounded-xl shadow-md border border-slate-200 transition-all en-text">Upcoming Seminars</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="py-16 container mx-auto px-4 max-w-6xl">
+        <div class="grid md:grid-cols-2 gap-8 items-center bg-white p-6 md:p-10 rounded-2xl shadow-sm border border-sky-100">
+            <div>
+                <h3 id="about-heading-gu" class="text-2xl font-bold text-sky-900 mb-4 border-b pb-2 border-sky-200 gu-text">ધ્યેય અને વિઝન</h3>
+                <h3 id="about-heading-en" class="text-2xl font-bold text-sky-900 mb-4 border-b pb-2 border-sky-200 en-text">Vision & Mission</h3>
+                
+                <p id="about-desc-gu" class="text-slate-600 leading-relaxed text-sm md:text-base gu-text">અમારો મુખ્ય હેતુ ગ્રામીણ યુવાનોને સ્પર્ધાત્મક પરીક્ષાઓ માટે પ્રોત્સાહિત કરવાનો, આધુનિક ડિજિટલ લેબ્સ દ્વારા કૌશલ્ય આપવાનો, અને મહિલાઓને સ્વનિર્ભર બનાવવાનો છે. બાપુપુરા ગામને એક મોડેલ સ્માર્ટ વિલેજ તરીકે સ્થાપિત કરવું એ અમારું સપનું છે.</p>
+                <p id="about-desc-en" class="text-slate-600 leading-relaxed text-sm md:text-base en-text">Our foundational core is to motivate rural youth for competitive examinations, offer technical skill-sets via digital modules, and structurally support women-led micro-enterprises across neighboring blocks.</p>
+            </div>
+            <div class="bg-sky-100/50 p-6 rounded-xl border border-sky-200/60">
+                <blockquote class="border-l-4 border-amber-500 pl-4 italic text-slate-700">
+                    <p id="about-quote-gu" class="gu-text">"શિક્ષણ અને યોગ્ય સંસ્કાર એ જ સમાજ પરિવર્તનનું સૌથી મોટું સાધન છે."</p>
+                    <p id="about-quote-en" class="en-text">"Education paired with foundational cultural values is the single most powerful catalyst for institutional societal change."</p>
+                </blockquote>
+            </div>
+        </div>
+    </section>
+
+    <!-- FACILITIES GRID SECTION -->
+    <section id="facilities" class="py-16 bg-white border-y border-sky-100">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="text-center mb-12">
+                <h3 id="fac-heading-gu" class="text-3xl font-bold text-slate-900 gu-text">ભવનની મુખ્ય પ્રવૃત્તિઓ અને આધુનિક સુવિધાઓ</h3>
+                <h3 id="fac-heading-en" class="text-3xl font-bold text-slate-900 en-text">Core Facilities & Community Activities</h3>
+                <p id="fac-sub-gu" class="text-slate-500 mt-2 gu-text">ગ્રામીણ સશક્તિકરણ માટે બિલ્ડિંગમાં ઉપલબ્ધ ચાર મુખ્ય સ્તંભો</p>
+                <p id="fac-sub-en" class="text-slate-500 mt-2 en-text">Four vital community infrastructure wings engineered for grassroots development.</p>
+            </div>
+
+            <div id="facilities-container" class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Injected Dynamically by Client main.js -->
+            </div>
+        </div>
+    </section>
+
+    <!-- NOTICES BOARD SECTION -->
+    <section id="news" class="py-16 container mx-auto px-4 max-w-4xl">
+        <h3 class="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+            📢 <span class="gu-text">જાહેરાતો અને ડાઉનલોડ કરવા પાત્ર ફાઇલો</span>
+            <span class="en-text">Announcements & Circular Downloads</span>
+        </h3>
+        <div id="notices-container" class="bg-white rounded-2xl shadow-xs border border-sky-100 divide-y divide-slate-100 overflow-hidden">
+            <!-- Injected Dynamically by Client main.js -->
+        </div>
+    </section>
+
+    <!-- DONATION BANK DETAILS SECTION -->
+    <section id="donation" class="py-16 bg-sky-900 text-white text-center">
+        <div class="container mx-auto px-4 max-w-3xl">
+            <h3 id="don-title-gu" class="text-3xl font-bold gu-text">ગામના વિકાસ માટે તમારું અમૂલ્ય યોગદાન આપો</h3>
+            <h3 id="don-title-en" class="text-3xl font-bold en-text">Support Your Village Development Vision</h3>
+            
+            <p id="don-desc-gu" class="text-sky-200 mt-3 text-sm md:text-base leading-relaxed gu-text">અમારા દ્વારા ચલાવવામાં આવતી લાઈબ્રેરી, ફ્રી કોમ્પ્યુટર લેબ અને મહિલા પાંખના સંચાલન માટે આપેલું દાન આવકવેરા મુક્તિ (80G) ને પાત્ર છે.</p>
+            <p id="don-desc-en" class="text-sky-200 mt-3 text-sm md:text-base leading-relaxed en-text">All funding support directed toward managing our free student libraries and skill classrooms qualifies for local statutory 80G tax benefits.</p>
+            
+            <div id="donation-bank-box" class="mt-8 bg-sky-950 p-6 rounded-2xl max-w-md mx-auto text-left border border-sky-800 shadow-xl space-y-2">
+                <!-- Injected Dynamically by Client main.js -->
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT INQUIRY SECTION -->
+    <section id="contact" class="py-16 container mx-auto px-4 max-w-6xl">
+        <div class="grid md:grid-cols-2 gap-8">
+            
+            {/* Contact Form Submission */}
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-xs border border-sky-100">
+                <h3 class="text-2xl font-bold text-slate-900 mb-6 border-b pb-2 gu-text">પૂછપરછ અથવા રજીસ્ટ્રેશન ફોર્મ</h3>
+                <h3 class="text-2xl font-bold text-slate-900 mb-6 border-b pb-2 en-text">Inquiry & Event Registration</h3>
+                
+                <form id="public-contact-form" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1 uppercase tracking-wider gu-text">આપનું પૂરું નામ</label>
+                        <label class="block text-xs font-bold text-slate-600 mb-1 uppercase tracking-wider en-text">Full Name</label>
+                        <input id="form-name" type="text" required class="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 focus:bg-white rounded-lg p-2.5 text-sm transition-all outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1 uppercase tracking-wider gu-text">મોબાઈલ નંબર</label>
+                        <label class="block text-xs font-bold text-slate-600 mb-1 uppercase tracking-wider en-text">Mobile Number</label>
+                        <input id="form-phone" type="tel" required class="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 focus:bg-white rounded-lg p-2.5 text-sm transition-all outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1 uppercase tracking-wider gu-text">ઈમેલ સરનામું (વૈકલ્પિક)</label>
+                        <label class="block text-xs font-bold text-slate-600 mb-1 uppercase tracking-wider en-text">Email Address (Optional)</label>
+                        <input id="form-email" type="email" class="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 focus:bg-white rounded-lg p-2.5 text-sm transition-all outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1 uppercase tracking-wider gu-text">તમારો સંદેશ / ક્વેરી</label>
+                        <label class="block text-xs font-bold text-slate-600 mb-1 uppercase tracking-wider en-text">Message / Inquiry Details</label>
+                        <textarea id="form-message" rows="3" required class="w-full bg-slate-50 border border-slate-200 focus:border-sky-500 focus:bg-white rounded-lg p-2.5 text-sm transition-all outline-none"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-2.5 rounded-lg text-sm shadow-md transition-all cursor-pointer gu-text">સંદેશ મોકલો</button>
+                    <button type="submit" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-2.5 rounded-lg text-sm shadow-md transition-all cursor-pointer en-text">Submit Details</button>
+                </form>
+            </div>
+
+            {/* Address Block & Google Map Embed */}
+            <div class="flex flex-col gap-4">
+                <div class="bg-white p-6 rounded-2xl border border-sky-100 flex-1">
+                    <h4 class="font-bold text-sky-900 text-lg gu-text">સરનામું અને સંપર્ક વિગત</h4>
+                    <h4 class="font-bold text-sky-900 text-lg en-text">Contact Information</h4>
+                    <div id="contact-details-box" class="space-y-4">
+                        <!-- Injected Dynamically by Client main.js -->
+                    </div>
+                </div>
+                
+                {/* Embed Map Iframe Container */}
+                <div id="map-iframe-container" class="bg-slate-200 rounded-2xl h-60 overflow-hidden relative shadow-inner border border-slate-300">
+                    <div class="absolute inset-0 bg-sky-100 flex flex-col justify-center items-center text-center p-4">
+                        <span class="text-xl mb-1">🗺️</span>
+                        <span class="text-xs font-bold text-slate-700 gu-text">ગુગલ મેપ્સ લોડ થઈ રહ્યું છે...</span>
+                        <span class="text-xs font-bold text-slate-700 en-text">Google Maps loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 text-xs md:text-sm">
+        <div class="container mx-auto px-4 max-w-6xl flex flex-wrap justify-between items-center gap-6">
+            <div>
+                <p id="footer-copyright-gu" class="font-bold text-white text-base gu-text">શ્રી રઘુવીર ચૌધરી સંસ્કાર ભવન બાપુપુરા © ૨૦૨૬</p>
+                <p id="footer-copyright-en" class="font-bold text-white text-base en-text">Shri Raghuveer Chaudhary Sanskar Bhavan Bapupura © 2026</p>
+                
+                <p id="footer-sub-gu" class="mt-1 text-slate-500 gu-text">સર્વ હક સ્વાધિન. સામાજિક અને શૈક્ષણિક ટ્રસ્ટ નોંધણી અંતર્ગત સંચાલિત.</p>
+                <p id="footer-sub-en" class="mt-1 text-slate-500 en-text">All Rights Reserved. Registered Educational & Welfare Trust.</p>
+            </div>
+            <div class="flex gap-4 font-semibold">
+                <a href="#about" class="hover:text-white transition-colors gu-text">ટ્રસ્ટ વિશે</a><a href="#about" class="hover:text-white transition-colors en-text">About</a>
+                <a href="#facilities" class="hover:text-white transition-colors gu-text">પ્રવૃત્તિઓ</a><a href="#facilities" class="hover:text-white transition-colors en-text">Activities</a>
+                <a href="#contact" class="hover:text-white transition-colors gu-text">મદદ કેન્દ્ર</a><a href="#contact" class="hover:text-white transition-colors en-text">Help Desk</a>
+                <a href="/admin" class="hover:text-white transition-colors gu-text">એડમિન પોર્ટલ</a><a href="/admin" class="hover:text-white transition-colors en-text">Admin Portal</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE CMS MODALS WRAPPER -->
+    <div id="cms-modals-root"></div>
+
+    <!-- Original layout dynamic script bindings removed for CSP compliance -->
+
+    <!-- Client Core dynamic javascript loader -->
+    <script src="/js/main.js"></script>
+</body>
+</html>
