@@ -56,6 +56,19 @@ const DEFAULTS = {
     twitterUrl: '',
     instagramUrl: '',
     whatsappUrl: '+919876543210'
+  },
+  founder: {
+    photoUrl: '',
+    nameGu: 'શ્રી રઘુવીર ચૌધરી',
+    nameEn: 'Shri Raghuveer Chaudhary',
+    bioGu: '',
+    bioEn: '',
+    achievementsGu: '',
+    achievementsEn: '',
+    facebookUrl: '',
+    twitterUrl: '',
+    instagramUrl: '',
+    linkedinUrl: ''
   }
 };
 

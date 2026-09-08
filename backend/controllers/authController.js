@@ -12,11 +12,11 @@ const generateToken = (id) => {
   });
 };
 
-// Seed Default Admin User if database is empty
+// Seed Default Admin User if no admin user exists
 const seedDefaultAdmin = async () => {
   try {
-    const count = await db.User.countDocuments();
-    if (count === 0) {
+    const adminUser = await db.User.findOne({ username: 'admin' });
+    if (!adminUser) {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash('adminpassword123', salt);
       
@@ -24,7 +24,9 @@ const seedDefaultAdmin = async () => {
         username: 'admin',
         password: hashedPassword,
         email: 'admin@bapupurasanskarbhavan.org',
-        role: 'super_admin'
+        role: 'super_admin',
+        name: 'Primary Super Admin',
+        status: 'active'
       });
       console.log('--------------------------------------------------');
       console.log('Seeded Default Super Admin User:');
@@ -51,10 +53,16 @@ const login = async (req, res) => {
     return res.status(400).json({ success: false, message: 'Please provide username and password' });
   }
 
+  const cleanUsername = String(username).trim();
+
   try {
-    const user = await db.User.findOne({ username });
+    const user = await db.User.findOne({ username: cleanUsername });
     if (!user) {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
+    }
+
+    if (user.status === 'inactive') {
+      return res.status(403).json({ success: false, message: 'Account is deactivated. Please contact Super Admin.' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);

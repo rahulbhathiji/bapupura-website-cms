@@ -1,4 +1,12 @@
 (function() {
+  const BACKEND_BASE = 'http://localhost:5000';
+  function fixUrl(url) {
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) return url;
+    if (url.startsWith('/')) return BACKEND_BASE + url;
+    return url;
+  }
+
   // Global Data Stores
   let settings = null;
   let heroContent = null;
@@ -181,7 +189,7 @@
     if (settings.logoUrl) {
       const logoBox = document.getElementById('brand-logo');
       if (logoBox) {
-        logoBox.innerHTML = `<img src="${settings.logoUrl}" className="w-10 h-10 object-contain rounded-lg" alt="Logo" />`;
+        logoBox.innerHTML = `<img src="${fixUrl(settings.logoUrl)}" className="w-10 h-10 object-contain rounded-lg" alt="Logo" />`;
         logoBox.className = 'w-12 h-12 p-0.5 rounded-xl bg-white flex items-center justify-center';
       }
     }
@@ -250,7 +258,7 @@
     if (heroContent.bgImageUrl) {
       const heroSec = document.getElementById('home');
       if (heroSec) {
-        heroSec.style.backgroundImage = `linear-gradient(to bottom, rgba(224, 242, 254, 0.9), rgba(240, 249, 255, 0.95)), url(${heroContent.bgImageUrl})`;
+        heroSec.style.backgroundImage = `linear-gradient(to bottom, rgba(224, 242, 254, 0.9), rgba(240, 249, 255, 0.95)), url(${fixUrl(heroContent.bgImageUrl)})`;
         heroSec.style.backgroundSize = 'cover';
         heroSec.style.backgroundPosition = 'center';
       }
@@ -292,7 +300,7 @@
         ${donationContent.upiId ? `<p class="text-sm font-mono"><strong class="text-sky-300">UPI ID:</strong> ${donationContent.upiId}</p>` : ''}
         ${donationContent.qrCodeUrl ? `
           <div class="mt-4 flex flex-col items-center justify-center p-3 bg-white rounded-xl max-w-[160px] mx-auto border shadow-inner">
-            <img src="${donationContent.qrCodeUrl}" class="w-32 h-32 object-contain" alt="QR Code" />
+            <img src="${fixUrl(donationContent.qrCodeUrl)}" class="w-32 h-32 object-contain" alt="QR Code" />
             <span class="text-[9px] font-bold text-slate-500 mt-1.5 uppercase">Scan to Donate</span>
           </div>
         ` : ''}
@@ -531,7 +539,7 @@
               ${json.data.map(book => `
                 <div class="border border-slate-200 dark:border-slate-800 p-4 rounded-2xl flex gap-3 bg-slate-50 dark:bg-slate-900/50">
                   <div class="w-14 h-18 bg-slate-100 border dark:border-slate-700 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">
-                    ${book.coverUrl ? `<img src="${book.coverUrl}" class="w-full h-full object-cover" />` : '📚'}
+                    ${book.coverUrl ? `<img src="${fixUrl(book.coverUrl)}" class="w-full h-full object-cover" />` : '📚'}
                   </div>
                   <div class="flex-1 flex flex-col justify-between">
                     <div>

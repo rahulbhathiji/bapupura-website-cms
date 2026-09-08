@@ -67,9 +67,17 @@ export const MediaLibrary: React.FC = () => {
     fetchMedia();
   }, [albumFilter, search, token]);
 
+  const resolveMediaUrl = (url: string) => {
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) return url;
+    const host = (window.location.port === '3000')
+      ? window.location.protocol + '//' + window.location.hostname + ':5000'
+      : window.location.origin;
+    return host + (url.startsWith('/') ? '' : '/') + url;
+  };
+
   const handleCopyLink = (item: MediaItem) => {
-    // Generate full URL
-    const fullUrl = window.location.origin + item.url;
+    const fullUrl = resolveMediaUrl(item.url);
     navigator.clipboard.writeText(fullUrl);
     setCopiedId(item._id || item.id);
     setTimeout(() => setCopiedId(null), 2000);
@@ -289,7 +297,7 @@ export const MediaLibrary: React.FC = () => {
                       <span className="text-[10px] font-bold mt-1 uppercase">PDF File</span>
                     </div>
                   ) : (
-                    <img src={item.url} className="w-full h-full object-cover" alt="" />
+                    <img src={resolveMediaUrl(item.url)} className="w-full h-full object-cover" alt="" />
                   )}
 
                   {/* Absolute floating quick actions */}

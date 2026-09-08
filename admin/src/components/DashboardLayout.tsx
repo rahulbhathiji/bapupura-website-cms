@@ -5,7 +5,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { 
   LayoutDashboard, FileText, ClipboardList, BookOpen, 
   Calendar, BellRing, Image, Mail, Settings, Globe, 
-  LogOut, Sun, Moon, Key, Menu, X
+  LogOut, Sun, Moon, Key, Menu, X, FileEdit, Users, Image as ImageIcon, Camera, Shield
 } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -46,30 +46,37 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
 
   const navItems = [
     { to: '/', icon: <LayoutDashboard size={20} />, label: 'Overview' },
+    { to: '/pages', icon: <FileEdit size={20} />, label: 'Custom Pages' },
     { to: '/content', icon: <FileText size={20} />, label: 'Sections Content' },
     { to: '/facilities', icon: <ClipboardList size={20} />, label: 'Facilities' },
-    { to: '/library', icon: <BookOpen size={20} />, label: 'Library wing' },
     { to: '/events', icon: <Calendar size={20} />, label: 'Workshops & Events' },
+    { to: '/gallery', icon: <Camera size={20} />, label: 'Event Gallery' },
     { to: '/notices', icon: <BellRing size={20} />, label: 'Notices Board' },
+    { to: '/donors', icon: <Users size={20} />, label: 'Donors' },
+    { to: '/sliders', icon: <ImageIcon size={20} />, label: 'Sliders' },
     { to: '/media', icon: <Image size={20} />, label: 'Media Library' },
+    { to: '/library', icon: <BookOpen size={20} />, label: 'Library Users' },
     { to: '/inbox', icon: <Mail size={20} />, label: 'Inquiries Inbox' },
+    { to: '/admins', icon: <Shield size={20} />, label: 'Admin Users' },
     { to: '/settings', icon: <Settings size={20} />, label: 'Website Settings' },
     { to: '/seo', icon: <Globe size={20} />, label: 'SEO & Meta Config' }
   ];
 
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
-      case 'super_admin': return 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-950/30 dark:text-rose-400 dark:border-rose-900/50';
+      case 'super_admin': return 'bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-950/30 dark:text-purple-400 dark:border-purple-900/50';
+      case 'site_admin': return 'bg-sky-100 text-sky-800 border-sky-200 dark:bg-sky-950/30 dark:text-sky-400 dark:border-sky-900/50';
       case 'admin': return 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-900/50';
-      default: return 'bg-sky-100 text-sky-800 border-sky-200 dark:bg-sky-950/30 dark:text-sky-400 dark:border-sky-900/50';
+      default: return 'bg-slate-100 text-slate-800 border-slate-200 dark:bg-slate-950/30 dark:text-slate-400 dark:border-slate-900/50';
     }
   };
 
   const getRoleLabel = (role: string) => {
     switch (role) {
       case 'super_admin': return 'Super Admin';
+      case 'site_admin': return 'Site Admin';
       case 'admin': return 'Admin';
-      default: return 'Editor';
+      default: return 'Staff';
     }
   };
 

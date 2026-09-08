@@ -5,7 +5,17 @@ import {
   CheckCircle, History, RotateCcw, AlertTriangle
 } from 'lucide-react';
 
-type SectionKey = 'hero' | 'about' | 'donation' | 'contact';
+const fixAdminUrl = (url: string) => {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) return url;
+  // Derive backend origin dynamically so it works across the LAN
+  const base = (window.location.port === '3000')
+    ? window.location.protocol + '//' + window.location.hostname + ':5000'
+    : window.location.origin;
+  return base + (url.startsWith('/') ? '' : '/') + url;
+};
+
+type SectionKey = 'hero' | 'about' | 'founder' | 'donation' | 'contact';
 
 interface HistoryItem {
   _id: string;
@@ -24,6 +34,7 @@ export const ContentSection: React.FC = () => {
   // Section states
   const [hero, setHero] = useState<any>(null);
   const [about, setAbout] = useState<any>(null);
+  const [founder, setFounder] = useState<any>(null);
   const [donation, setDonation] = useState<any>(null);
   const [contact, setContact] = useState<any>(null);
   
@@ -41,6 +52,7 @@ export const ContentSection: React.FC = () => {
       if (json.success) {
         if (section === 'hero') setHero(json.data);
         if (section === 'about') setAbout(json.data);
+        if (section === 'founder') setFounder(json.data);
         if (section === 'donation') setDonation(json.data);
         if (section === 'contact') setContact(json.data);
       }
@@ -68,6 +80,7 @@ export const ContentSection: React.FC = () => {
     await Promise.all([
       fetchSection('hero'),
       fetchSection('about'),
+      fetchSection('founder'),
       fetchSection('donation'),
       fetchSection('contact')
     ]);
@@ -102,6 +115,7 @@ export const ContentSection: React.FC = () => {
         setToast('Content saved and updated successfully!');
         if (section === 'hero') setHero(json.data);
         if (section === 'about') setAbout(json.data);
+        if (section === 'founder') setFounder(json.data);
         if (section === 'donation') setDonation(json.data);
         if (section === 'contact') setContact(json.data);
         
@@ -143,6 +157,8 @@ export const ContentSection: React.FC = () => {
           setHero((prev: any) => ({ ...prev, [fieldName]: uploadedUrl }));
         } else if (section === 'about') {
           setAbout((prev: any) => ({ ...prev, [fieldName]: uploadedUrl }));
+        } else if (section === 'founder') {
+          setFounder((prev: any) => ({ ...prev, [fieldName]: uploadedUrl }));
         } else if (section === 'donation') {
           setDonation((prev: any) => ({ ...prev, [fieldName]: uploadedUrl }));
         }
@@ -208,7 +224,7 @@ export const ContentSection: React.FC = () => {
 
       {/* Tabs selectors */}
       <div className="flex flex-wrap border-b border-slate-200 dark:border-slate-800 gap-1 mb-6">
-        {(['hero', 'about', 'donation', 'contact'] as SectionKey[]).map(tab => (
+        {(['hero', 'about', 'founder', 'donation', 'contact'] as SectionKey[]).map(tab => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -322,6 +338,89 @@ export const ContentSection: React.FC = () => {
 
               <div className="flex justify-end pt-4">
                 <button onClick={() => handleSave('about', about)} disabled={saving} className="bg-sky-600 hover:bg-sky-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer">
+                  {saving ? 'Saving...' : <><Save size={18} /> Save Changes</>}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* TAB: FOUNDER EDITOR */}
+          {activeTab === 'founder' && founder && (
+            <div className="space-y-5">
+              <h3 className="text-lg font-bold text-slate-800 dark:text-white border-b pb-2.5 border-slate-100 dark:border-slate-800">Edit Founder/Trustee Section</h3>
+              
+              <div className="flex items-center gap-4 mb-4">
+                <div className="relative w-32 h-32 bg-slate-100 dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 shrink-0">
+                  {founder.photoUrl ? (
+                    <img src={fixAdminUrl(founder.photoUrl)} alt="Founder" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center text-slate-400">
+                      <ImageIcon size={32} className="mb-2 opacity-50" />
+                    </div>
+                  )}
+                  {uploadingField === 'photoUrl' && (
+                    <div className="absolute inset-0 bg-white/70 dark:bg-slate-900/70 flex items-center justify-center">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-sky-600"></div>
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Founder Photo URL</label>
+                  <div className="flex gap-2">
+                    <input type="text" value={founder.photoUrl} onChange={(e) => setFounder({ ...founder, photoUrl: e.target.value })} className="flex-1 px-4 py-2 bg-slate-50 border rounded-xl text-sm" placeholder="URL or upload..." />
+                    <label className="bg-sky-50 text-sky-600 px-4 py-2 rounded-xl border border-sky-100 flex items-center gap-2 cursor-pointer hover:bg-sky-100 transition-colors">
+                      <Upload size={16} /> Upload
+                      <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, 'founder', 'photoUrl')} />
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Name (Gujarati)</label>
+                  <input type="text" value={founder.nameGu} onChange={(e) => setFounder({ ...founder, nameGu: e.target.value })} className="w-full px-4 py-2 bg-slate-50 border rounded-xl text-sm" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Name (English)</label>
+                  <input type="text" value={founder.nameEn} onChange={(e) => setFounder({ ...founder, nameEn: e.target.value })} className="w-full px-4 py-2 bg-slate-50 border rounded-xl text-sm" />
+                </div>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Bio/Message (Gujarati)</label>
+                  <textarea rows={4} value={founder.bioGu} onChange={(e) => setFounder({ ...founder, bioGu: e.target.value })} className="w-full px-4 py-2 bg-slate-50 border rounded-xl text-sm" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Bio/Message (English)</label>
+                  <textarea rows={4} value={founder.bioEn} onChange={(e) => setFounder({ ...founder, bioEn: e.target.value })} className="w-full px-4 py-2 bg-slate-50 border rounded-xl text-sm" />
+                </div>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Achievements (Gujarati - Rich Text)</label>
+                  <textarea rows={4} value={founder.achievementsGu} onChange={(e) => setFounder({ ...founder, achievementsGu: e.target.value })} className="w-full px-4 py-2 bg-slate-50 border rounded-xl text-sm" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Achievements (English - Rich Text)</label>
+                  <textarea rows={4} value={founder.achievementsEn} onChange={(e) => setFounder({ ...founder, achievementsEn: e.target.value })} className="w-full px-4 py-2 bg-slate-50 border rounded-xl text-sm" />
+                </div>
+              </div>
+              
+              <div className="border-t border-slate-100 dark:border-slate-800 pt-4 space-y-4">
+                <h4 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Social Links</h4>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div><label className="text-xs font-bold text-slate-500">Facebook URL</label><input type="text" value={founder.facebookUrl} onChange={(e) => setFounder({...founder, facebookUrl: e.target.value})} className="w-full px-4 py-2 border rounded-xl text-sm" /></div>
+                  <div><label className="text-xs font-bold text-slate-500">Twitter URL</label><input type="text" value={founder.twitterUrl} onChange={(e) => setFounder({...founder, twitterUrl: e.target.value})} className="w-full px-4 py-2 border rounded-xl text-sm" /></div>
+                  <div><label className="text-xs font-bold text-slate-500">Instagram URL</label><input type="text" value={founder.instagramUrl} onChange={(e) => setFounder({...founder, instagramUrl: e.target.value})} className="w-full px-4 py-2 border rounded-xl text-sm" /></div>
+                  <div><label className="text-xs font-bold text-slate-500">LinkedIn URL</label><input type="text" value={founder.linkedinUrl} onChange={(e) => setFounder({...founder, linkedinUrl: e.target.value})} className="w-full px-4 py-2 border rounded-xl text-sm" /></div>
+                </div>
+              </div>
+
+              <div className="flex justify-end pt-4">
+                <button onClick={() => handleSave('founder', founder)} disabled={saving} className="bg-sky-600 hover:bg-sky-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer">
                   {saving ? 'Saving...' : <><Save size={18} /> Save Changes</>}
                 </button>
               </div>

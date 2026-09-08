@@ -17,5 +17,16 @@ export default defineConfig({
       }
     }
   },
-  base: '/admin/'
+  base: '/admin/',
+  build: {
+    chunkSizeWarningLimit: 2000,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          lucide: ['lucide-react']
+        }
+      }
+    }
+  }
 });

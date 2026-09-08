@@ -26,7 +26,11 @@ const MODELS = {
   Inquiry: 'Inquiry',
   Analytics: 'Analytics',
   History: 'History',
-  Settings: 'Settings'
+  Settings: 'Settings',
+  Page: 'Page',
+  Donor: 'Donor',
+  Slider: 'Slider',
+  Gallery: 'Gallery'
 };
 
 let db = {};
@@ -37,7 +41,10 @@ if (useMongo) {
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     email: { type: String, required: true },
-    role: { type: String, enum: ['super_admin', 'admin', 'editor'], default: 'admin' }
+    name: { type: String, default: '' },
+    phone: { type: String, default: '' },
+    status: { type: String, enum: ['active', 'inactive'], default: 'active' },
+    role: { type: String, enum: ['super_admin', 'site_admin', 'admin', 'editor'], default: 'site_admin' }
   }, { timestamps: true });
 
   const SettingsSchema = new mongoose.Schema({
@@ -66,12 +73,88 @@ if (useMongo) {
     data: { type: mongoose.Schema.Types.Mixed, required: true }
   }, { timestamps: true });
 
+  const PageSchema = new mongoose.Schema({
+    titleGu: { type: String, required: true },
+    titleEn: { type: String, required: true },
+    slug: { type: String, required: true, unique: true },
+    contentGu: { type: String, default: '' },
+    contentEn: { type: String, default: '' },
+    seo: {
+      metaTitle: { type: String, default: '' },
+      metaDescription: { type: String, default: '' },
+      keywords: { type: String, default: '' }
+    },
+    status: { type: String, enum: ['published', 'draft'], default: 'draft' },
+    isEnabled: { type: Boolean, default: true },
+    showInNav: { type: Boolean, default: true },
+    navOrder: { type: Number, default: 0 },
+    bannerImage: { type: String, default: '' }
+  }, { timestamps: true });
+
+  const DonorSchema = new mongoose.Schema({
+    nameGu: { type: String, required: true },
+    nameEn: { type: String, required: true },
+    photoUrl: { type: String, default: '' },
+    bioGu: { type: String, default: '' },
+    bioEn: { type: String, default: '' },
+    detailsGu: { type: String, default: '' },
+    detailsEn: { type: String, default: '' },
+    isFeatured: { type: Boolean, default: false }
+  }, { timestamps: true });
+
+  const SliderSchema = new mongoose.Schema({
+    section: { type: String, required: true, enum: ['hero', 'about'] }, // which slider it belongs to
+    imageUrl: { type: String, required: true },
+    titleGu: { type: String, default: '' },
+    titleEn: { type: String, default: '' },
+    subtitleGu: { type: String, default: '' },
+    subtitleEn: { type: String, default: '' },
+    order: { type: Number, default: 0 },
+    isEnabled: { type: Boolean, default: true }
+  }, { timestamps: true });
+
+  const GallerySchema = new mongoose.Schema({
+    titleGu: { type: String, required: true },
+    titleEn: { type: String, required: true },
+    category: { type: String, default: 'General' },
+    date: { type: String, default: '' },
+    descGu: { type: String, default: '' },
+    descEn: { type: String, default: '' },
+    coverImage: { type: String, default: '' },
+    photos: [{
+      url: { type: String, required: true },
+      captionGu: { type: String, default: '' },
+      captionEn: { type: String, default: '' }
+    }],
+    videos: [{
+      url: { type: String, required: true },
+      titleGu: { type: String, default: '' },
+      titleEn: { type: String, default: '' },
+      type: { type: String, default: 'youtube' }
+    }],
+    isFeatured: { type: Boolean, default: false },
+    isEnabled: { type: Boolean, default: true },
+    order: { type: Number, default: 0 }
+  }, { timestamps: true });
+
   const FacilitySchema = new mongoose.Schema({
     icon: { type: String, default: '📚' },
     titleGu: { type: String, required: true },
     titleEn: { type: String, required: true },
+    slug: { type: String, required: true },
     descGu: { type: String, required: true },
     descEn: { type: String, required: true },
+    richTextContentGu: { type: String, default: '' },
+    richTextContentEn: { type: String, default: '' },
+    bannerImage: { type: String, default: '' },
+    galleryImages: [{ type: String }],
+    videos: [{ type: String }],
+    documents: [{ type: String }],
+    seoSettings: {
+      metaTitle: { type: String, default: '' },
+      metaDescription: { type: String, default: '' }
+    },
+    isPublished: { type: Boolean, default: true },
     order: { type: Number, default: 0 },
     isEnabled: { type: Boolean, default: true }
   }, { timestamps: true });
@@ -94,22 +177,31 @@ if (useMongo) {
     date: { type: String, required: true }, // YYYY-MM-DD
     locationGu: { type: String, default: 'બાપુપુરા' },
     locationEn: { type: String, default: 'Bapupura' },
+    venueGu: { type: String, default: '' },
+    venueEn: { type: String, default: '' },
     registrationLink: { type: String, default: '' },
     isFeatured: { type: Boolean, default: false },
     images: [{ type: String }],
+    galleryImages: [{ type: String }],
+    status: { type: String, enum: ['published', 'draft', 'archived'], default: 'draft' },
     isArchived: { type: Boolean, default: false }
   }, { timestamps: true });
 
   const NoticeSchema = new mongoose.Schema({
     titleGu: { type: String, required: true },
     titleEn: { type: String, required: true },
+    descriptionGu: { type: String, default: '' },
+    descriptionEn: { type: String, default: '' },
     categoryGu: { type: String, default: 'સામાન્ય' },
     categoryEn: { type: String, default: 'General' },
-    pdfUrl: { type: String, required: true },
+    pdfUrl: { type: String, default: '' },
+    fileUrls: [{ type: String }],
     fileSize: { type: String, default: '0.0 MB' },
     expiryDate: { type: String, default: '' }, // YYYY-MM-DD
     isPinned: { type: Boolean, default: false },
-    isUrgent: { type: Boolean, default: false }
+    isUrgent: { type: Boolean, default: false },
+    status: { type: String, enum: ['published', 'draft'], default: 'draft' },
+    isEnabled: { type: Boolean, default: true }
   }, { timestamps: true });
 
   const MediaSchema = new mongoose.Schema({
@@ -157,6 +249,10 @@ if (useMongo) {
   db.Inquiry = mongoose.model(MODELS.Inquiry, InquirySchema);
   db.Analytics = mongoose.model(MODELS.Analytics, AnalyticsSchema);
   db.History = mongoose.model(MODELS.History, HistorySchema);
+  db.Page = mongoose.model(MODELS.Page, PageSchema);
+  db.Donor = mongoose.model(MODELS.Donor, DonorSchema);
+  db.Slider = mongoose.model(MODELS.Slider, SliderSchema);
+  db.Gallery = mongoose.model(MODELS.Gallery, GallerySchema);
 } else {
   // Initialize Local Models
   db.User = localDb.model(MODELS.User);
@@ -170,6 +266,10 @@ if (useMongo) {
   db.Inquiry = localDb.model(MODELS.Inquiry);
   db.Analytics = localDb.model(MODELS.Analytics);
   db.History = localDb.model(MODELS.History);
+  db.Page = localDb.model(MODELS.Page);
+  db.Donor = localDb.model(MODELS.Donor);
+  db.Slider = localDb.model(MODELS.Slider);
+  db.Gallery = localDb.model(MODELS.Gallery);
 }
 
 module.exports = db;

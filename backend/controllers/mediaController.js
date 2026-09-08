@@ -62,7 +62,6 @@ const uploadMedia = async (req, res) => {
     const uploadedDocs = [];
 
     for (const file of req.files) {
-      // Local storage URL format
       const fileUrl = `/uploads/${file.filename}`;
       
       const doc = await db.Media.create({

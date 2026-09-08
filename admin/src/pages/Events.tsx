@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+
+const fixAdminUrl = (url: string) => {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) return url;
+  // Derive backend origin dynamically so it works across the LAN
+  const base = (window.location.port === '3000')
+    ? window.location.protocol + '//' + window.location.hostname + ':5000'
+    : window.location.origin;
+  return base + (url.startsWith('/') ? '' : '/') + url;
+};
 import { 
   Plus, Edit2, Trash2, Calendar, MapPin, 
   Link as LinkIcon, Star, EyeOff, X, Upload 
@@ -275,7 +285,7 @@ export const Events: React.FC = () => {
                     <div className="flex gap-2 overflow-x-auto pt-3 max-w-full">
                       {item.images.slice(0, 4).map((img, i) => (
                         <div key={i} className="w-12 h-12 rounded-lg bg-slate-100 border dark:border-slate-800 overflow-hidden shrink-0">
-                          <img src={img} className="w-full h-full object-cover" alt="" />
+                          <img src={fixAdminUrl(img)} className="w-full h-full object-cover" alt="" />
                         </div>
                       ))}
                       {item.images.length > 4 && (
@@ -370,7 +380,7 @@ export const Events: React.FC = () => {
                 <div className="grid grid-cols-4 sm:grid-cols-6 gap-3 mb-3">
                   {images.map((img, i) => (
                     <div key={i} className="aspect-square bg-slate-100 border dark:border-slate-800 rounded-xl overflow-hidden relative group">
-                      <img src={img} className="w-full h-full object-cover" alt="" />
+                      <img src={fixAdminUrl(img)} className="w-full h-full object-cover" alt="" />
                       <button 
                         type="button"
                         onClick={() => handleRemoveImage(i)}

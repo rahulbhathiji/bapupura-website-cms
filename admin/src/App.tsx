@@ -7,11 +7,16 @@ import { DashboardLayout } from './components/DashboardLayout';
 // Pages placeholders to import
 import { Login } from './pages/Login';
 import { Overview } from './pages/Overview';
+import { PagesManager } from './pages/PagesManager';
 import { ContentSection } from './pages/ContentSection';
 import { Facilities } from './pages/Facilities';
 import { Library } from './pages/Library';
 import { Events } from './pages/Events';
 import { Notices } from './pages/Notices';
+import { Donors } from './pages/Donors';
+import { SliderManager } from './pages/SliderManager';
+import { GalleryManager } from './pages/GalleryManager';
+import { AdminUsers } from './pages/AdminUsers';
 import { MediaLibrary } from './pages/MediaLibrary';
 import { Inbox } from './pages/Inbox';
 import { Settings } from './pages/Settings';
@@ -53,13 +58,19 @@ export const App: React.FC = () => {
 
             {/* Protected CMS Admin Routes */}
             <Route path="/" element={<ProtectedRoute><Overview /></ProtectedRoute>} />
+            <Route path="/pages" element={<ProtectedRoute><PagesManager /></ProtectedRoute>} />
             <Route path="/content" element={<ProtectedRoute><ContentSection /></ProtectedRoute>} />
             <Route path="/facilities" element={<ProtectedRoute><Facilities /></ProtectedRoute>} />
             <Route path="/library" element={<ProtectedRoute><Library /></ProtectedRoute>} />
             <Route path="/events" element={<ProtectedRoute><Events /></ProtectedRoute>} />
             <Route path="/notices" element={<ProtectedRoute><Notices /></ProtectedRoute>} />
+            <Route path="/donors" element={<ProtectedRoute><Donors /></ProtectedRoute>} />
+            <Route path="/sliders" element={<ProtectedRoute><SliderManager /></ProtectedRoute>} />
+            <Route path="/gallery" element={<ProtectedRoute><GalleryManager /></ProtectedRoute>} />
             <Route path="/media" element={<ProtectedRoute><MediaLibrary /></ProtectedRoute>} />
             <Route path="/inbox" element={<ProtectedRoute><Inbox /></ProtectedRoute>} />
+            <Route path="/admins" element={<ProtectedRoute><AdminUsers /></ProtectedRoute>} />
+            <Route path="/users" element={<ProtectedRoute><AdminUsers /></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             <Route path="/seo" element={<ProtectedRoute><SEO /></ProtectedRoute>} />
             <Route path="/change-password" element={<ProtectedRoute><ChangePassword /></ProtectedRoute>} />

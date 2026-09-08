@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+
+const fixAdminUrl = (url: string) => {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) return url;
+  // Derive backend origin dynamically so it works across the LAN
+  const base = (window.location.port === '3000')
+    ? window.location.protocol + '//' + window.location.hostname + ':5000'
+    : window.location.origin;
+  return base + (url.startsWith('/') ? '' : '/') + url;
+};
 import { 
   Plus, Edit2, Trash2, Search, Download, Star, 
   Upload, FileText, ImageIcon, X, CheckCircle 
@@ -248,7 +258,7 @@ export const Library: React.FC = () => {
                       <div className="flex items-center gap-3">
                         <div className="w-9 h-12 bg-slate-100 dark:bg-slate-800 border dark:border-slate-700 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">
                           {book.coverUrl ? (
-                            <img src={book.coverUrl} className="w-full h-full object-cover" alt="" />
+                            <img src={fixAdminUrl(book.coverUrl)} className="w-full h-full object-cover" alt="" />
                           ) : (
                             <FileText size={18} className="text-slate-400" />
                           )}

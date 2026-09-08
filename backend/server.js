@@ -25,7 +25,8 @@ app.use(helmet({
       connectSrc: ["'self'", "*"],
       upgradeInsecureRequests: null
     }
-  }
+  },
+  crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
 // CORS Configuration
@@ -43,8 +44,8 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 // Standard Body Parsers
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.json({ limit: '500mb' }));
+app.use(express.urlencoded({ extended: true, limit: '500mb' }));
 
 // Custom Cookie Parser middleware
 app.use((req, res, next) => {
@@ -108,6 +109,17 @@ app.use((err, req, res, next) => {
   res.status(500).json({ success: false, message: err.message || 'Server Internal Error' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Bapupura Sanskar Bhavan Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  const { networkInterfaces } = require('os');
+  const nets = networkInterfaces();
+  let lanIp = 'localhost';
+  for (const name of Object.keys(nets)) {
+    for (const net of nets[name]) {
+      if (net.family === 'IPv4' && !net.internal) { lanIp = net.address; break; }
+    }
+  }
+  console.log(`Bapupura Sanskar Bhavan Server running on port ${PORT}`);
+  console.log(`  Local:   http://localhost:${PORT}`);
+  console.log(`  Network: http://${lanIp}:${PORT}`);
+  console.log(`  Admin:   http://${lanIp}:${PORT}/admin`);
 });
