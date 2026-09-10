@@ -134,10 +134,67 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('hashchange', initRouter);
 });
 
+function getYouTubeDetails(url) {
+    if (!url) return null;
+    var fixed = fixUrl(url);
+    var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
+    var match = fixed.match(regExp);
+    if (match && match[2].length === 11) {
+        var videoId = match[2];
+        return {
+            isYouTube: true,
+            videoId: videoId,
+            embedUrl: 'https://www.youtube.com/embed/' + videoId,
+            thumbnailUrl: 'https://img.youtube.com/vi/' + videoId + '/hqdefault.jpg'
+        };
+    }
+    return {
+        isYouTube: false,
+        videoUrl: fixed
+    };
+}
+
+function renderVideoCardHtml(videoUrl, titleGu, titleEn) {
+    var yt = getYouTubeDetails(videoUrl);
+    if (yt && yt.isYouTube) {
+        var id = 'yt_' + Math.random().toString(36).substr(2, 9);
+        return '<div class="flex flex-col gap-2 group">' +
+            '<div id="' + id + '" class="relative h-56 rounded-2xl overflow-hidden border border-slate-200 shadow-sm bg-black group-hover:shadow-md transition-all cursor-pointer">' +
+                '<img src="' + yt.thumbnailUrl + '" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="YouTube Thumbnail" />' +
+                '<div class="absolute inset-0 bg-black/30 flex items-center justify-center">' +
+                    '<button onclick="playYouTubeEmbed(\'' + id + '\', \'' + yt.embedUrl + '\')" class="w-14 h-14 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center shadow-lg transition-transform transform group-hover:scale-110 cursor-pointer" title="Play Video">' +
+                        '<svg class="w-7 h-7 fill-current translate-x-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>' +
+                    '</button>' +
+                '</div>' +
+            '</div>' +
+            '<div class="font-bold text-sm text-slate-800">' +
+                '<span class="gu-text">' + (titleGu || titleEn || 'ઇવેન્ટ વિડિઓ') + '</span>' +
+                '<span class="en-text">' + (titleEn || titleGu || 'Event Video') + '</span>' +
+            '</div>' +
+        '</div>';
+    }
+    return '<div class="flex flex-col gap-2">' +
+        '<video src="' + fixUrl(videoUrl) + '" controls class="w-full h-56 rounded-2xl bg-black object-contain border border-slate-200 shadow-sm"></video>' +
+        '<div class="font-bold text-sm text-slate-800">' +
+            '<span class="gu-text">' + (titleGu || titleEn || 'ઇવેન્ટ વિડિઓ') + '</span>' +
+            '<span class="en-text">' + (titleEn || titleGu || 'Event Video') + '</span>' +
+        '</div>' +
+    '</div>';
+}
+
+function playYouTubeEmbed(containerId, embedUrl) {
+    var container = document.getElementById(containerId);
+    if (container) {
+        container.innerHTML = '<iframe src="' + embedUrl + '?autoplay=1" class="w-full h-full rounded-2xl" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+    }
+}
+window.playYouTubeEmbed = playYouTubeEmbed;
+
 function initRouter() {
     var hash = window.location.hash || '#home';
     var dynamicContainer = document.getElementById('dynamic-page');
     var staticSections = document.querySelectorAll('section:not(#dynamic-page)');
+    var founderSec = document.getElementById('founder-section-container');
 
     var isDynamic = (
         hash.indexOf('#/page/') === 0 ||
@@ -151,11 +208,19 @@ function initRouter() {
 
     if (isDynamic) {
         staticSections.forEach(function(sec) { sec.style.display = 'none'; });
+        if (founderSec) founderSec.style.display = 'none';
         dynamicContainer.style.display = 'block';
         dynamicContainer.innerHTML = '<div class="text-center py-20 text-sky-700 text-xl font-semibold">Loading...</div>';
         loadDynamicContent(hash);
     } else {
         staticSections.forEach(function(sec) { sec.style.display = 'block'; });
+        if (founderSec) {
+            if (founderSec.dataset.hasData === 'true') {
+                founderSec.style.display = 'block';
+            } else {
+                founderSec.style.display = 'none';
+            }
+        }
         dynamicContainer.style.display = 'none';
     }
 }
@@ -234,14 +299,113 @@ async function loadDynamicContent(hash) {
 }
 
 function renderDynamicPage(page, container) {
-    var banner = page.bannerImage ? '<img src="' + fixUrl(page.bannerImage) + '" class="w-full h-64 object-cover rounded-xl mb-8" />' : '';
+    var banner = page.bannerImage ? '<img src="' + fixUrl(page.bannerImage) + '" class="w-full h-64 md:h-80 object-cover rounded-2xl mb-8 shadow-sm" />' : '';
+    var sec = page.enabledSections || {
+        enableContent: true, enableGallery: true, enableVideos: true, enableDocuments: true, enableLinks: true
+    };
+
+    // Information Rich Text
+    var contentHtml = '';
+    if (sec.enableContent !== false && (page.contentGu || page.contentEn)) {
+        contentHtml =
+            '<div class="prose max-w-none text-slate-700 leading-relaxed mb-8 gu-text">' + (page.contentGu || '') + '</div>' +
+            '<div class="prose max-w-none text-slate-700 leading-relaxed mb-8 en-text">' + (page.contentEn || '') + '</div>';
+    }
+
+    // Photo Gallery
+    var galleryHtml = '';
+    if (sec.enableGallery !== false && page.galleryImages && page.galleryImages.length > 0) {
+        var imgs = page.galleryImages.map(function(img) {
+            var url = fixUrl(img.url || img);
+            var capGu = img.captionGu || '';
+            var capEn = img.captionEn || '';
+            return '<div class="group relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 aspect-square shadow-xs hover:shadow-md transition-all">' +
+                '<img src="' + url + '" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />' +
+                (capGu || capEn ? (
+                    '<div class="absolute bottom-0 inset-x-0 bg-black/70 backdrop-blur-xs text-white text-[11px] p-2 text-center truncate">' +
+                        '<span class="gu-text">' + capGu + '</span>' +
+                        '<span class="en-text">' + capEn + '</span>' +
+                    '</div>'
+                ) : '') +
+            '</div>';
+        }).join('');
+        galleryHtml =
+            '<div class="mt-10 border-t border-slate-100 pt-8">' +
+                '<h3 class="text-2xl font-bold text-sky-950 mb-6 gu-text">📷 ફોટો ગેલેરી</h3>' +
+                '<h3 class="text-2xl font-bold text-sky-950 mb-6 en-text">📷 Photo Gallery</h3>' +
+                '<div class="grid grid-cols-2 md:grid-cols-4 gap-4">' + imgs + '</div>' +
+            '</div>';
+    }
+
+    // Video Gallery
+    var videosHtml = '';
+    if (sec.enableVideos !== false && page.videos && page.videos.length > 0) {
+        var vids = page.videos.map(function(v) {
+            return renderVideoCardHtml(v.url || '', v.titleGu, v.titleEn);
+        }).join('');
+        videosHtml =
+            '<div class="mt-10 border-t border-slate-100 pt-8">' +
+                '<h3 class="text-2xl font-bold text-sky-950 mb-6 gu-text">🎬 વિડિઓ ગેલેરી</h3>' +
+                '<h3 class="text-2xl font-bold text-sky-950 mb-6 en-text">🎬 Video Gallery</h3>' +
+                '<div class="grid grid-cols-1 md:grid-cols-2 gap-6">' + vids + '</div>' +
+            '</div>';
+    }
+
+    // Documents
+    var docsHtml = '';
+    if (sec.enableDocuments !== false && page.documents && page.documents.length > 0) {
+        var docs = page.documents.map(function(doc) {
+            var fixedDoc = fixUrl(doc.url || doc);
+            var titleGu = doc.titleGu || doc.titleEn || 'દસ્તાવેજ ડાઉનલોડ';
+            var titleEn = doc.titleEn || doc.titleGu || 'Download Document';
+            var size = doc.fileSize ? ' (' + doc.fileSize + ')' : '';
+            return '<a href="' + fixedDoc + '" target="_blank" class="flex items-center gap-3 p-4 bg-sky-50 hover:bg-sky-100 rounded-xl border border-sky-100 transition-all font-semibold text-sky-900 group">' +
+                '<span class="text-2xl">📄</span>' +
+                '<div class="flex-1">' +
+                    '<span class="gu-text block">' + titleGu + size + '</span>' +
+                    '<span class="en-text block">' + titleEn + size + '</span>' +
+                '</div>' +
+                '<span class="text-xs bg-sky-600 text-white px-3 py-1.5 rounded-lg shadow-xs group-hover:bg-sky-700 transition-colors">Download ⬇</span>' +
+            '</a>';
+        }).join('');
+        docsHtml =
+            '<div class="mt-10 border-t border-slate-100 pt-8">' +
+                '<h3 class="text-2xl font-bold text-sky-950 mb-6 gu-text">📄 દસ્તાવેજો અને પત્રકો</h3>' +
+                '<h3 class="text-2xl font-bold text-sky-950 mb-6 en-text">📄 Documents & Downloads</h3>' +
+                '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">' + docs + '</div>' +
+            '</div>';
+    }
+
+    // Links
+    var linksHtml = '';
+    if (sec.enableLinks !== false && page.links && page.links.length > 0) {
+        var linkItems = page.links.map(function(l) {
+            var tGu = l.titleGu || l.titleEn || l.url;
+            var tEn = l.titleEn || l.titleGu || l.url;
+            return '<a href="' + l.url + '" target="_blank" class="inline-flex items-center gap-2 p-3 bg-white hover:bg-slate-50 border border-slate-200 shadow-xs hover:shadow-md rounded-xl text-sky-700 font-bold transition-all text-sm">' +
+                '<span>🔗</span>' +
+                '<span class="gu-text">' + tGu + '</span>' +
+                '<span class="en-text">' + tEn + '</span>' +
+            '</a>';
+        }).join('');
+        linksHtml =
+            '<div class="mt-10 border-t border-slate-100 pt-8">' +
+                '<h3 class="text-2xl font-bold text-sky-950 mb-6 gu-text">🔗 ઉપયોગી લિંક્સ</h3>' +
+                '<h3 class="text-2xl font-bold text-sky-950 mb-6 en-text">🔗 Useful External Links</h3>' +
+                '<div class="flex flex-wrap gap-3">' + linkItems + '</div>' +
+            '</div>';
+    }
+
     container.innerHTML =
-        '<div class="bg-white p-8 rounded-2xl shadow-sm border border-sky-100">' +
+        '<div class="bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-sky-100/80">' +
             banner +
-            '<h1 class="text-3xl font-bold text-sky-900 mb-6 gu-text">' + (page.titleGu || '') + '</h1>' +
-            '<h1 class="text-3xl font-bold text-sky-900 mb-6 en-text">' + (page.titleEn || '') + '</h1>' +
-            '<div class="prose max-w-none text-slate-600 gu-text">' + (page.contentGu || '') + '</div>' +
-            '<div class="prose max-w-none text-slate-600 en-text">' + (page.contentEn || '') + '</div>' +
+            '<h1 class="text-3xl md:text-5xl font-extrabold text-sky-950 mb-6 gu-text tracking-tight">' + (page.titleGu || '') + '</h1>' +
+            '<h1 class="text-3xl md:text-5xl font-extrabold text-sky-950 mb-6 en-text tracking-tight">' + (page.titleEn || '') + '</h1>' +
+            contentHtml +
+            galleryHtml +
+            videosHtml +
+            docsHtml +
+            linksHtml +
         '</div>';
     syncLanguage();
 }
@@ -264,14 +428,7 @@ function renderDynamicFacility(facility, container) {
     var videosHtml = '';
     if (facility.videos && facility.videos.length > 0) {
         var vids = facility.videos.map(function(vid) {
-            var fixedVid = fixUrl(vid);
-            // Detect if it's a YouTube link
-            if (fixedVid.includes('youtube.com') || fixedVid.includes('youtu.be')) {
-                var embedUrl = fixedVid.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/');
-                return '<iframe src="' + embedUrl + '" class="w-full h-64 rounded-lg border border-slate-200" allowfullscreen></iframe>';
-            }
-            // Otherwise treat as a direct video file
-            return '<video src="' + fixedVid + '" controls class="w-full rounded-lg border border-slate-200" style="max-height:360px"></video>';
+            return renderVideoCardHtml(vid.url || vid, vid.titleGu, vid.titleEn);
         }).join('');
         videosHtml =
             '<h3 class="text-xl font-bold mt-8 mb-4 gu-text">વિડિઓઝ</h3>' +
@@ -460,7 +617,22 @@ async function fetchFounder() {
                         '</div>' +
                     '</div>';
 
-                container.style.display = 'block';
+                container.dataset.hasData = 'true';
+                var hash = window.location.hash || '#home';
+                var isDynamic = (
+                    hash.indexOf('#/page/') === 0 ||
+                    hash.indexOf('#/facility/') === 0 ||
+                    hash.indexOf('#/event/') === 0 ||
+                    hash.indexOf('#/notice/') === 0 ||
+                    hash === '#/donors' ||
+                    hash.indexOf('#/donors') === 0 ||
+                    hash.indexOf('#/donor/') === 0
+                );
+                if (!isDynamic) {
+                    container.style.display = 'block';
+                } else {
+                    container.style.display = 'none';
+                }
                 syncLanguage();
             }
         }
@@ -504,6 +676,15 @@ function setupSliderElement(containerId, slides) {
 }
 
 async function fetchCMSData() {
+    // Fetch Settings and update custom Navigation labels
+    try {
+        var setRes = await fetch(API_BASE + '/settings');
+        var setJson = await setRes.json();
+        if (setJson.success && setJson.data && setJson.data.navLabels) {
+            updateNavTabLabels(setJson.data.navLabels);
+        }
+    } catch(e) { console.error('Settings fetch error', e); }
+
     // Fetch and render Facilities cards
     try {
         var facRes = await fetch(API_BASE + '/facilities');
@@ -551,6 +732,46 @@ async function fetchCMSData() {
         }
     } catch(e) { console.error('Pages fetch error', e); }
     syncLanguage();
+}
+
+function updateNavTabLabels(nl) {
+    if (!nl) return;
+    var tabMap = [
+        { href: '#home', gu: nl.homeGu, en: nl.homeEn },
+        { href: '#about', gu: nl.aboutGu, en: nl.aboutEn },
+        { href: '#facilities', gu: nl.facilitiesGu, en: nl.facilitiesEn },
+        { href: '#/donors', gu: nl.donorsGu, en: nl.donorsEn },
+        { href: '#gallery', gu: nl.galleryGu, en: nl.galleryEn },
+        { href: '#news', gu: nl.noticesGu, en: nl.noticesEn },
+        { href: '#contact', gu: nl.contactGu, en: nl.contactEn }
+    ];
+
+    tabMap.forEach(function(t) {
+        var links = document.querySelectorAll('header nav a[href="' + t.href + '"], #mobileDrawer nav a[href="' + t.href + '"]');
+        links.forEach(function(link) {
+            if (link.classList.contains('gu-text') && t.gu) {
+                var icon = link.querySelector('span');
+                if (icon && link.innerText.trim().startsWith('🏛️')) {
+                    icon.innerText = t.gu;
+                } else {
+                    link.innerText = t.gu;
+                }
+            }
+            if (link.classList.contains('en-text') && t.en) {
+                var icon = link.querySelector('span');
+                if (icon && link.innerText.trim().startsWith('🏛️')) {
+                    icon.innerText = t.en;
+                } else {
+                    link.innerText = t.en;
+                }
+            }
+        });
+    });
+
+    var facBtnGu = document.querySelector('header nav .group button span.gu-text');
+    var facBtnEn = document.querySelector('header nav .group button span.en-text');
+    if (facBtnGu && nl.facilitiesGu) facBtnGu.innerText = nl.facilitiesGu;
+    if (facBtnEn && nl.facilitiesEn) facBtnEn.innerText = nl.facilitiesEn;
 }
 
 /**
@@ -747,24 +968,7 @@ function openGalleryModal(albumId) {
         videosPanel.innerHTML = '<div class="col-span-2 text-center py-12 text-slate-400 text-sm">No videos attached to this album.</div>';
     } else {
         videosPanel.innerHTML = videos.map(function(v) {
-            var vidUrl = fixUrl(v.url || '');
-            var isYt = vidUrl.includes('youtube.com') || vidUrl.includes('youtu.be');
-            var embedCode = '';
-
-            if (isYt) {
-                var embedUrl = vidUrl.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/');
-                embedCode = '<iframe src="' + embedUrl + '" class="w-full h-56 rounded-2xl border border-slate-200 shadow-sm" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>';
-            } else {
-                embedCode = '<video src="' + vidUrl + '" controls class="w-full h-56 rounded-2xl bg-black object-contain border border-slate-200 shadow-sm"></video>';
-            }
-
-            return '<div class="flex flex-col gap-2">' +
-                embedCode +
-                '<div class="font-bold text-sm text-slate-800">' +
-                    '<span class="gu-text">' + (v.titleGu || v.titleEn || 'ઇવેન્ટ વિડિઓ') + '</span>' +
-                    '<span class="en-text">' + (v.titleEn || v.titleGu || 'Event Video') + '</span>' +
-                '</div>' +
-            '</div>';
+            return renderVideoCardHtml(v.url || '', v.titleGu, v.titleEn);
         }).join('');
     }
 

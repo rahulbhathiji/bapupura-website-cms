@@ -55,6 +55,22 @@ if (useMongo) {
     copyrightEn: { type: String, default: 'Shri Raghuveer Chaudhary Sanskar Bhavan Bapupura © 2026' },
     footerSubtextGu: { type: String, default: 'સર્વ હક સ્વાધિન. સામાજિક અને શૈક્ષણિક ટ્રસ્ટ નોંધણી અંતર્ગત સંચાલિત.' },
     footerSubtextEn: { type: String, default: 'All Rights Reserved. Registered Educational & Welfare Trust.' },
+    navLabels: {
+      homeGu: { type: String, default: 'હોમ' },
+      homeEn: { type: String, default: 'Home' },
+      aboutGu: { type: String, default: 'વિશે' },
+      aboutEn: { type: String, default: 'About' },
+      facilitiesGu: { type: String, default: 'સુવિધાઓ' },
+      facilitiesEn: { type: String, default: 'Facilities' },
+      donorsGu: { type: String, default: 'દાતાઓ' },
+      donorsEn: { type: String, default: 'Donors' },
+      galleryGu: { type: String, default: 'ગેલેરી' },
+      galleryEn: { type: String, default: 'Gallery' },
+      noticesGu: { type: String, default: 'સૂચનાઓ' },
+      noticesEn: { type: String, default: 'Notices' },
+      contactGu: { type: String, default: 'સંપર્ક' },
+      contactEn: { type: String, default: 'Contact' }
+    },
     themeColors: {
       primary: { type: String, default: '#0284c7' }, // sky-600
       secondary: { type: String, default: '#f59e0b' } // amber-500
@@ -79,6 +95,35 @@ if (useMongo) {
     slug: { type: String, required: true, unique: true },
     contentGu: { type: String, default: '' },
     contentEn: { type: String, default: '' },
+    galleryImages: [{
+      url: { type: String, required: true },
+      captionGu: { type: String, default: '' },
+      captionEn: { type: String, default: '' }
+    }],
+    videos: [{
+      url: { type: String, required: true },
+      titleGu: { type: String, default: '' },
+      titleEn: { type: String, default: '' },
+      type: { type: String, default: 'youtube' }
+    }],
+    documents: [{
+      titleGu: { type: String, default: '' },
+      titleEn: { type: String, default: '' },
+      url: { type: String, required: true },
+      fileSize: { type: String, default: '' }
+    }],
+    links: [{
+      titleGu: { type: String, default: '' },
+      titleEn: { type: String, default: '' },
+      url: { type: String, required: true }
+    }],
+    enabledSections: {
+      enableContent: { type: Boolean, default: true },
+      enableGallery: { type: Boolean, default: true },
+      enableVideos: { type: Boolean, default: true },
+      enableDocuments: { type: Boolean, default: true },
+      enableLinks: { type: Boolean, default: true }
+    },
     seo: {
       metaTitle: { type: String, default: '' },
       metaDescription: { type: String, default: '' },

@@ -17,6 +17,16 @@ export const Settings: React.FC = () => {
   const [primaryColor, setPrimaryColor] = useState('#0284c7');
   const [secondaryColor, setSecondaryColor] = useState('#f59e0b');
 
+  const [navLabels, setNavLabels] = useState({
+    homeGu: 'હોમ', homeEn: 'Home',
+    aboutGu: 'વિશે', aboutEn: 'About',
+    facilitiesGu: 'સુવિધાઓ', facilitiesEn: 'Facilities',
+    donorsGu: 'દાતાઓ', donorsEn: 'Donors',
+    galleryGu: 'ગેલેરી', galleryEn: 'Gallery',
+    noticesGu: 'સૂચનાઓ', noticesEn: 'Notices',
+    contactGu: 'સંપર્ક', contactEn: 'Contact'
+  });
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState('');
@@ -38,6 +48,24 @@ export const Settings: React.FC = () => {
         if (d.themeColors) {
           setPrimaryColor(d.themeColors.primary || '#0284c7');
           setSecondaryColor(d.themeColors.secondary || '#f59e0b');
+        }
+        if (d.navLabels) {
+          setNavLabels({
+            homeGu: d.navLabels.homeGu || 'હોમ',
+            homeEn: d.navLabels.homeEn || 'Home',
+            aboutGu: d.navLabels.aboutGu || 'વિશે',
+            aboutEn: d.navLabels.aboutEn || 'About',
+            facilitiesGu: d.navLabels.facilitiesGu || 'સુવિધાઓ',
+            facilitiesEn: d.navLabels.facilitiesEn || 'Facilities',
+            donorsGu: d.navLabels.donorsGu || 'દાતાઓ',
+            donorsEn: d.navLabels.donorsEn || 'Donors',
+            galleryGu: d.navLabels.galleryGu || 'ગેલેરી',
+            galleryEn: d.navLabels.galleryEn || 'Gallery',
+            noticesGu: d.navLabels.noticesGu || 'સૂચનાઓ',
+            noticesEn: d.navLabels.noticesEn || 'Notices',
+            contactGu: d.navLabels.contactGu || 'સંપર્ક',
+            contactEn: d.navLabels.contactEn || 'Contact'
+          });
         }
       }
     } catch (e) {
@@ -93,6 +121,7 @@ export const Settings: React.FC = () => {
       copyrightEn,
       footerSubtextGu,
       footerSubtextEn,
+      navLabels,
       themeColors: {
         primary: primaryColor,
         secondary: secondaryColor
@@ -233,6 +262,61 @@ export const Settings: React.FC = () => {
                 onChange={(e) => setFooterSubtextEn(e.target.value)} 
                 className="w-full px-4 py-2 bg-slate-50 dark:bg-slate-855 border border-slate-200 dark:border-slate-700 rounded-xl outline-none text-sm" 
               />
+            </div>
+          </div>
+
+          <div className="border-t border-slate-100 dark:border-slate-800 pt-5 space-y-4">
+            <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest">Navigation Menu Tab Labels (મેનુ ટેબ નામો)</h4>
+            <div className="grid sm:grid-cols-2 gap-4 bg-slate-50 dark:bg-slate-800/40 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700/60">
+              <div>
+                <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1">Home Tab (ગુજરાતી / English)</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <input type="text" value={navLabels.homeGu} onChange={(e) => setNavLabels({ ...navLabels, homeGu: e.target.value })} placeholder="હોમ" className="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none" />
+                  <input type="text" value={navLabels.homeEn} onChange={(e) => setNavLabels({ ...navLabels, homeEn: e.target.value })} placeholder="Home" className="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1">About Tab (ગુજરાતી / English)</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <input type="text" value={navLabels.aboutGu} onChange={(e) => setNavLabels({ ...navLabels, aboutGu: e.target.value })} placeholder="વિશે" className="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none" />
+                  <input type="text" value={navLabels.aboutEn} onChange={(e) => setNavLabels({ ...navLabels, aboutEn: e.target.value })} placeholder="About" className="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1">Facilities Tab (ગુજરાતી / English)</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <input type="text" value={navLabels.facilitiesGu} onChange={(e) => setNavLabels({ ...navLabels, facilitiesGu: e.target.value })} placeholder="સુવિધાઓ" className="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none" />
+                  <input type="text" value={navLabels.facilitiesEn} onChange={(e) => setNavLabels({ ...navLabels, facilitiesEn: e.target.value })} placeholder="Facilities" className="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1">Donors Tab (ગુજરાતી / English)</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <input type="text" value={navLabels.donorsGu} onChange={(e) => setNavLabels({ ...navLabels, donorsGu: e.target.value })} placeholder="દાતાઓ" className="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none" />
+                  <input type="text" value={navLabels.donorsEn} onChange={(e) => setNavLabels({ ...navLabels, donorsEn: e.target.value })} placeholder="Donors" className="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1">Gallery Tab (ગુજરાતી / English)</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <input type="text" value={navLabels.galleryGu} onChange={(e) => setNavLabels({ ...navLabels, galleryGu: e.target.value })} placeholder="ગેલેરી" className="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none" />
+                  <input type="text" value={navLabels.galleryEn} onChange={(e) => setNavLabels({ ...navLabels, galleryEn: e.target.value })} placeholder="Gallery" className="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1">Notices Tab (ગુજરાતી / English)</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <input type="text" value={navLabels.noticesGu} onChange={(e) => setNavLabels({ ...navLabels, noticesGu: e.target.value })} placeholder="સૂચનાઓ" className="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none" />
+                  <input type="text" value={navLabels.noticesEn} onChange={(e) => setNavLabels({ ...navLabels, noticesEn: e.target.value })} placeholder="Notices" className="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1">Contact Tab (ગુજરાતી / English)</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <input type="text" value={navLabels.contactGu} onChange={(e) => setNavLabels({ ...navLabels, contactGu: e.target.value })} placeholder="સંપર્ક" className="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none" />
+                  <input type="text" value={navLabels.contactEn} onChange={(e) => setNavLabels({ ...navLabels, contactEn: e.target.value })} placeholder="Contact" className="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none" />
+                </div>
+              </div>
             </div>
           </div>
 
