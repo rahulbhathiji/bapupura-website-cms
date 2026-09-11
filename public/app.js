@@ -203,7 +203,9 @@ function initRouter() {
         hash.indexOf('#/notice/') === 0 ||
         hash === '#/donors' ||
         hash.indexOf('#/donors') === 0 ||
-        hash.indexOf('#/donor/') === 0
+        hash.indexOf('#/donor/') === 0 ||
+        hash === '#/committees' ||
+        hash.indexOf('#/committees') === 0
     );
 
     if (isDynamic) {
@@ -237,6 +239,11 @@ async function loadDynamicContent(hash) {
     try {
         if (type === 'donors') {
             await renderDonorsList(container);
+            return;
+        }
+
+        if (type === 'committees') {
+            await renderCommitteesPage(container);
             return;
         }
 
@@ -541,6 +548,139 @@ function renderDonorDetail(donor, container) {
     syncLanguage();
 }
 
+async function renderCommitteesPage(container) {
+    try {
+        var res = await fetch(API_BASE + '/committees');
+        var json = await res.json();
+        var members = json.data || [];
+
+        var trustees = members.filter(function(m) { return m.committeeType === 'trustees'; });
+        var advisory = members.filter(function(m) { return m.committeeType === 'advisory'; });
+        var executive = members.filter(function(m) { return m.committeeType === 'executive'; });
+
+        trustees.sort(function(a, b) { return (a.order || 0) - (b.order || 0); });
+        advisory.sort(function(a, b) { return (a.order || 0) - (b.order || 0); });
+        executive.sort(function(a, b) { return (a.order || 0) - (b.order || 0); });
+
+        function buildMemberCards(list, badgeLabelGu, badgeLabelEn, colorClass) {
+            if (!list || list.length === 0) {
+                return '<div class="col-span-full text-center py-8 text-slate-400">માહિતી ઉપલબ્ધ નથી / No members available</div>';
+            }
+            return list.map(function(m) {
+                var photo = fixUrl(m.photoUrl);
+                var photoHtml = photo
+                    ? '<img src="' + photo + '" alt="' + (m.nameEn || '') + '" class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md mx-auto mb-3" />'
+                    : '<div class="w-24 h-24 rounded-full bg-gradient-to-br from-sky-600 to-sky-800 text-white font-extrabold text-2xl flex items-center justify-center border-4 border-white shadow-md mx-auto mb-3">' + (m.nameEn || 'M').charAt(0) + '</div>';
+
+                return '<div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-md hover:shadow-xl transition-all text-center flex flex-col items-center justify-between group relative overflow-hidden">' +
+                    '<div class="absolute top-3 right-3 text-xs font-bold bg-slate-100 text-slate-500 w-6 h-6 rounded-full flex items-center justify-center shadow-xs">' + (m.order || 1) + '</div>' +
+                    '<div class="w-full">' +
+                        photoHtml +
+                        '<h4 class="font-extrabold text-slate-900 text-base leading-snug gu-text mb-0.5">' + (m.nameGu || '') + '</h4>' +
+                        '<h4 class="font-extrabold text-slate-900 text-base leading-snug en-text mb-0.5">' + (m.nameEn || '') + '</h4>' +
+                        (m.designationGu || m.designationEn ? (
+                            '<div class="mt-3 pt-2.5 border-t border-slate-100 w-full text-xs font-semibold text-sky-700">' +
+                                '<p class="gu-text">' + (m.designationGu || '') + '</p>' +
+                                '<p class="en-text">' + (m.designationEn || '') + '</p>' +
+                            '</div>'
+                        ) : '') +
+                    '</div>' +
+                '</div>';
+            }).join('');
+        }
+
+        container.innerHTML =
+            '<div class="max-w-6xl mx-auto py-4">' +
+                /* Top Banner Header */
+                '<div class="text-center mb-10">' +
+                    '<span class="inline-block bg-sky-100 text-sky-800 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full gu-text mb-3">શ્રી રઘુવીર ચૌધરી સંસ્કાર ભવન ટ્રસ્ટ, બાપુપુરા</span>' +
+                    '<span class="inline-block bg-sky-100 text-sky-800 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full en-text mb-3">Shri Raghuveer Chaudhary Sanskar Bhavan Trust, Bapupura</span>' +
+                    '<h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 gu-text tracking-tight">ટ્રસ્ટીમંડળ અને સમિતિ સભ્યો</h1>' +
+                    '<h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 en-text tracking-tight">Board of Trustees & Committees</h1>' +
+                    '<p class="text-slate-600 mt-3 text-sm md:text-base max-w-2xl mx-auto gu-text">બાપુપુરા ગામ અને સંસ્કાર ભવનના સંચાલન અને વિકાસ માટે સમર્પિત ટ્રસ્ટીમંડળ, સલાહકાર સમિતિ અને નિયામક મંડળ.</p>' +
+                    '<p class="text-slate-600 mt-3 text-sm md:text-base max-w-2xl mx-auto en-text">Dedicated leadership governing the social, educational, and community welfare initiatives of Sanskar Bhavan.</p>' +
+                '</div>' +
+
+                /* Trust Contact & Leadership Highlight Box */
+                '<div class="bg-gradient-to-r from-sky-900 via-sky-800 to-sky-900 text-white rounded-3xl p-6 md:p-8 shadow-xl mb-12 border border-sky-700/50 relative overflow-hidden">' +
+                    '<div class="relative z-10 grid md:grid-cols-3 gap-6 text-center md:text-left items-center divide-y md:divide-y-0 md:divide-x divide-sky-700/60">' +
+                        '<div class="pb-4 md:pb-0 md:pr-6">' +
+                            '<span class="text-amber-400 text-xs font-bold uppercase tracking-wider gu-text">ટ્રસ્ટ વડુ મથક</span>' +
+                            '<span class="text-amber-400 text-xs font-bold uppercase tracking-wider en-text">Trust Headquarters</span>' +
+                            '<h3 class="text-xl font-bold mt-1 gu-text">શ્રી રઘુવીર ચૌધરી સંસ્કાર ભવન ટ્રસ્ટ</h3>' +
+                            '<h3 class="text-xl font-bold mt-1 en-text">Shri Raghuveer Chaudhary Sanskar Bhavan Trust</h3>' +
+                            '<p class="text-sky-200 text-xs mt-1">મુ. પો. બાપુપુરા, તા. માણસા, જિ. ગાંધીનગર</p>' +
+                        '</div>' +
+                        '<div class="py-4 md:py-0 md:px-6">' +
+                            '<span class="text-sky-300 text-xs font-bold uppercase tracking-wider gu-text">મેનેજિંગ ટ્રસ્ટી - પ્રમુખ</span>' +
+                            '<span class="text-sky-300 text-xs font-bold uppercase tracking-wider en-text">Managing Trustee - President</span>' +
+                            '<h4 class="text-lg font-extrabold text-white mt-1 gu-text">શ્રી સંજયભાઈ રઘુવીરભાઈ ચૌધરી</h4>' +
+                            '<h4 class="text-lg font-extrabold text-white mt-1 en-text">Shri Sanjaybhai Raghuveerbhai Chaudhary</h4>' +
+                        '</div>' +
+                        '<div class="pt-4 md:pt-0 md:pl-6">' +
+                            '<span class="text-sky-300 text-xs font-bold uppercase tracking-wider gu-text">મંત્રી</span>' +
+                            '<span class="text-sky-300 text-xs font-bold uppercase tracking-wider en-text">Secretary</span>' +
+                            '<h4 class="text-lg font-extrabold text-white mt-1 gu-text">શ્રી મંગળભાઈ જોઇતાભાઈ ચૌધરી</h4>' +
+                            '<h4 class="text-lg font-extrabold text-white mt-1 en-text">Shri Mangalbhai Joitabhai Chaudhary</h4>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+
+                /* Category 1: Board of Trustees (ટ્રસ્ટીમંડળ) */
+                '<div class="mb-14">' +
+                    '<div class="flex items-center gap-3 mb-6 pb-3 border-b-2 border-amber-400">' +
+                        '<div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold text-lg shadow-md">🏛️</div>' +
+                        '<div>' +
+                            '<h2 class="text-2xl font-extrabold text-slate-900 gu-text">ટ્રસ્ટીમંડળ (Board of Trustees)</h2>' +
+                            '<h2 class="text-2xl font-extrabold text-slate-900 en-text">Board of Trustees</h2>' +
+                            '<p class="text-xs text-slate-500 font-semibold gu-text">કુલ ૯ ટ્રસ્ટી સભ્યો</p>' +
+                            '<p class="text-xs text-slate-500 font-semibold en-text">Total 9 Governing Trustees</p>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">' +
+                        buildMemberCards(trustees, 'ટ્રસ્ટી', 'Trustee', 'amber') +
+                    '</div>' +
+                '</div>' +
+
+                /* Category 2: Advisory Committee (સલાહકાર સમિતિ) */
+                '<div class="mb-14">' +
+                    '<div class="flex items-center gap-3 mb-6 pb-3 border-b-2 border-sky-500">' +
+                        '<div class="w-10 h-10 rounded-xl bg-sky-600 text-white flex items-center justify-center font-bold text-lg shadow-md">💡</div>' +
+                        '<div>' +
+                            '<h2 class="text-2xl font-extrabold text-slate-900 gu-text">સલાહકાર સમિતિ (Advisory Committee)</h2>' +
+                            '<h2 class="text-2xl font-extrabold text-slate-900 en-text">Advisory Committee</h2>' +
+                            '<p class="text-xs text-slate-500 font-semibold gu-text">કુલ ૯ માનનીય સલાહકાર સભ્યો</p>' +
+                            '<p class="text-xs text-slate-500 font-semibold en-text">Total 9 Advisory Board Members</p>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">' +
+                        buildMemberCards(advisory, 'સલાહકાર', 'Adviser', 'sky') +
+                    '</div>' +
+                '</div>' +
+
+                /* Category 3: Executive Committee (નિયામક મંડળ) */
+                '<div class="mb-14">' +
+                    '<div class="flex items-center gap-3 mb-6 pb-3 border-b-2 border-emerald-500">' +
+                        '<div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg shadow-md">⚙️</div>' +
+                        '<div>' +
+                            '<h2 class="text-2xl font-extrabold text-slate-900 gu-text">નિયામક મંડળ (Executive Committee)</h2>' +
+                            '<h2 class="text-2xl font-extrabold text-slate-900 en-text">Executive Committee</h2>' +
+                            '<p class="text-xs text-slate-500 font-semibold gu-text">કુલ ૧૫ કાર્યકારી સભ્યો</p>' +
+                            '<p class="text-xs text-slate-500 font-semibold en-text">Total 15 Executive Committee Members</p>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">' +
+                        buildMemberCards(executive, 'નિયામક', 'Executive Member', 'emerald') +
+                    '</div>' +
+                '</div>' +
+            '</div>';
+
+        syncLanguage();
+    } catch(e) {
+        container.innerHTML = '<div class="text-center py-20 text-red-500">Failed to load committee members. (' + e.message + ')</div>';
+    }
+}
+
 async function fetchFounder() {
     try {
         var res = await fetch(API_BASE + '/content/founder');
@@ -613,6 +753,15 @@ async function fetchFounder() {
                                     '</div>'
                                 ) : '') +
 
+                                /* Committee Page Button Callout */
+                                '<div class="mt-8 pt-6 border-t border-slate-100 w-full flex justify-center">' +
+                                    '<a href="#/committees" class="inline-flex items-center gap-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold px-6 py-3 rounded-2xl shadow-lg shadow-sky-600/20 transition-all hover:scale-105 cursor-pointer">' +
+                                        '<span class="text-xl">👥</span>' +
+                                        '<span class="gu-text">ટ્રસ્ટીઓ અને કમિટી સભ્યો જુઓ &rarr;</span>' +
+                                        '<span class="en-text">View Board of Trustees & Committees &rarr;</span>' +
+                                    '</a>' +
+                                '</div>' +
+
                             '</div>' +
                         '</div>' +
                     '</div>';
@@ -626,7 +775,9 @@ async function fetchFounder() {
                     hash.indexOf('#/notice/') === 0 ||
                     hash === '#/donors' ||
                     hash.indexOf('#/donors') === 0 ||
-                    hash.indexOf('#/donor/') === 0
+                    hash.indexOf('#/donor/') === 0 ||
+                    hash === '#/committees' ||
+                    hash.indexOf('#/committees') === 0
                 );
                 if (!isDynamic) {
                     container.style.display = 'block';

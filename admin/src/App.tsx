@@ -14,6 +14,7 @@ import { Library } from './pages/Library';
 import { Events } from './pages/Events';
 import { Notices } from './pages/Notices';
 import { Donors } from './pages/Donors';
+import { Committees } from './pages/Committees';
 import { SliderManager } from './pages/SliderManager';
 import { GalleryManager } from './pages/GalleryManager';
 import { AdminUsers } from './pages/AdminUsers';
@@ -65,6 +66,7 @@ export const App: React.FC = () => {
             <Route path="/events" element={<ProtectedRoute><Events /></ProtectedRoute>} />
             <Route path="/notices" element={<ProtectedRoute><Notices /></ProtectedRoute>} />
             <Route path="/donors" element={<ProtectedRoute><Donors /></ProtectedRoute>} />
+            <Route path="/committees" element={<ProtectedRoute><Committees /></ProtectedRoute>} />
             <Route path="/sliders" element={<ProtectedRoute><SliderManager /></ProtectedRoute>} />
             <Route path="/gallery" element={<ProtectedRoute><GalleryManager /></ProtectedRoute>} />
             <Route path="/media" element={<ProtectedRoute><MediaLibrary /></ProtectedRoute>} />

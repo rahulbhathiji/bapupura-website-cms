@@ -30,12 +30,24 @@ const MODELS = {
   Page: 'Page',
   Donor: 'Donor',
   Slider: 'Slider',
-  Gallery: 'Gallery'
+  Gallery: 'Gallery',
+  Committee: 'Committee'
 };
 
 let db = {};
 
 if (useMongo) {
+  // Define Schemas for Mongoose
+  const CommitteeSchema = new mongoose.Schema({
+    nameGu: { type: String, required: true },
+    nameEn: { type: String, required: true },
+    designationGu: { type: String, default: '' },
+    designationEn: { type: String, default: '' },
+    committeeType: { type: String, required: true, enum: ['trustees', 'advisory', 'executive'] },
+    photoUrl: { type: String, default: '' },
+    order: { type: Number, default: 0 },
+    isEnabled: { type: Boolean, default: true }
+  }, { timestamps: true });
   // Define Schemas for Mongoose
   const UserSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
@@ -298,6 +310,7 @@ if (useMongo) {
   db.Donor = mongoose.model(MODELS.Donor, DonorSchema);
   db.Slider = mongoose.model(MODELS.Slider, SliderSchema);
   db.Gallery = mongoose.model(MODELS.Gallery, GallerySchema);
+  db.Committee = mongoose.model(MODELS.Committee, CommitteeSchema);
 } else {
   // Initialize Local Models
   db.User = localDb.model(MODELS.User);
@@ -315,6 +328,7 @@ if (useMongo) {
   db.Donor = localDb.model(MODELS.Donor);
   db.Slider = localDb.model(MODELS.Slider);
   db.Gallery = localDb.model(MODELS.Gallery);
+  db.Committee = localDb.model(MODELS.Committee);
 }
 
 module.exports = db;

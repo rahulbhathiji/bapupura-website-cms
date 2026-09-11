@@ -21,6 +21,7 @@ const donorRoutes = require('./donorRoutes');
 const sliderRoutes = require('./sliderRoutes');
 const galleryRoutes = require('./galleryRoutes');
 const userRoutes = require('./userRoutes');
+const committeeRoutes = require('./committeeRoutes');
 
 // ----------------------------------------------------
 // Authentication Routes (/api/auth)
@@ -123,5 +124,6 @@ router.get('/analytics/summary', protect, authorize('editor', 'site_admin', 'adm
 router.use('/donors', donorRoutes);
 router.use('/sliders', sliderRoutes);
 router.use('/gallery', galleryRoutes);
+router.use('/committees', committeeRoutes);
 
 module.exports = router;

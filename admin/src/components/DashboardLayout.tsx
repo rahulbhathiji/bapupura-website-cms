@@ -53,6 +53,7 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
     { to: '/gallery', icon: <Camera size={20} />, label: 'Event Gallery' },
     { to: '/notices', icon: <BellRing size={20} />, label: 'Notices Board' },
     { to: '/donors', icon: <Users size={20} />, label: 'Donors' },
+    { to: '/committees', icon: <Users size={20} />, label: 'Board & Committees' },
     { to: '/sliders', icon: <ImageIcon size={20} />, label: 'Sliders' },
     { to: '/media', icon: <Image size={20} />, label: 'Media Library' },
     { to: '/library', icon: <BookOpen size={20} />, label: 'Library Users' },
