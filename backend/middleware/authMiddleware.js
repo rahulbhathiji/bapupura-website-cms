@@ -19,7 +19,7 @@ const protect = async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'super_secret_session_token_bapupura_sanskar_bhavan_cms_2026');
     
     // Fetch user details
     const user = await db.User.findById(decoded.id);

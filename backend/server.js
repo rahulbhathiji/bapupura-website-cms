@@ -81,12 +81,12 @@ const ADMIN_DIST = path.join(__dirname, '../admin/dist');
 if (fs.existsSync(ADMIN_DIST)) {
   app.use('/admin', express.static(ADMIN_DIST));
   // Single Page App fallback routing for admin dashboard
-  app.get('/admin/*', (req, res) => {
+  app.get(['/admin', '/admin/*'], (req, res) => {
     res.sendFile(path.join(ADMIN_DIST, 'index.html'));
   });
 } else {
   // If not built yet, output placeholder
-  app.get('/admin/*', (req, res) => {
+  app.get(['/admin', '/admin/*'], (req, res) => {
     res.status(200).send(`
       <div style="font-family:sans-serif; text-align:center; padding:100px 20px; background:#f0f9ff; color:#0369a1; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;">
         <h1>Admin Dashboard Under Construction</h1>

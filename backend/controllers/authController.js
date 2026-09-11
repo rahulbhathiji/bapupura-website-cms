@@ -7,7 +7,7 @@ require('dotenv').config();
 
 // Helper: Generate JWT Token
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+  return jwt.sign({ id }, process.env.JWT_SECRET || 'super_secret_session_token_bapupura_sanskar_bhavan_cms_2026', {
     expiresIn: process.env.JWT_EXPIRY || '8h'
   });
 };
